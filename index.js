@@ -1,7 +1,8 @@
 import bodyParser from 'body-parser';
+import { crmRoutes } from './src/routes/crmRoutes';
 import express from 'express';
 import mongoose from 'mongoose';
-import routes from './src/routes/crmRoutes';
+import { webRoutes } from './src/routes/webRoutes';
 
 const app = express();
 const PORT = 3000;
@@ -14,11 +15,11 @@ mongoose.connect('mongodb://localhost/ExpressTutorial', {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-routes(app);
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
 
-app.get('/', (req, res) =>
-	res.send(`Node and Express server is running on port ${PORT}`)
-);
+crmRoutes(app);
+webRoutes(app);
 
 app.listen(PORT, () =>
 	console.log(`Node and Express server is running on port ${PORT}`)
